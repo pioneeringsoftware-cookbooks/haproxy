@@ -44,7 +44,7 @@ end
 
 if node['haproxy']['enable_ssl']
   pool = ["option ssl-hello-chk"]
-  pool << ["option httpchk #{node['haproxy']['ssl_httpchk']}"] if node['haproxy']['ssl_httpchk']
+  pool << "option httpchk #{node['haproxy']['ssl_httpchk']}" if node['haproxy']['ssl_httpchk']
 
   servers = node['haproxy']['pool_members'].uniq.map do |s|
     "#{s[:hostname]} #{s[:ipaddress]}:#{node['haproxy']['ssl_member_port']} weight 1 maxconn #{node['haproxy']['member_max_connections']} check"
