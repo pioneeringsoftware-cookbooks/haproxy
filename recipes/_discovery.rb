@@ -27,8 +27,14 @@ pool_members << node if node.run_list.roles.include?(node['haproxy']['app_server
 # TODO refactor this logic into library...see COOK-494
 pool_members.map! do |member|
   server_ip = begin
-    if member.attribute?('cloud')
-      if node.attribute?('cloud') && (member['cloud']['provider'] == node['cloud']['provider'])
+    # Do not use `member.attribute?('cloud')` to determine if the prospective
+    # pool member has cloud attributes. The Ohai cloud plugin sets up the cloud
+    # mash albeit with empty address arrays even if the member is not a
+    # cloud-based node. In other words, `attribute?('cloud')` always answers
+    # true and therefore redundant. Instead, decide if the cloud hash is empty,
+    # or not.
+    if member.attribute?('cloud').values.flatten.empty?
+      if node.attribute?('cloud').values.flatten.empty? && (member['cloud']['provider'] == node['cloud']['provider'])
          member['cloud']['local_ipv4']
       else
         member['cloud']['public_ipv4']
