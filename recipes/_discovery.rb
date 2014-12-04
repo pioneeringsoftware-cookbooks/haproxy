@@ -35,7 +35,7 @@ pool_members.map! do |member|
     # or not.
     if !member['cloud'].values.flatten.empty?
       if !node['cloud'].values.flatten.empty? && (member['cloud']['provider'] == node['cloud']['provider'])
-         member['cloud']['local_ipv4']
+        member['cloud']['local_ipv4']
       else
         member['cloud']['public_ipv4']
       end
