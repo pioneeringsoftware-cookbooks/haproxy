@@ -33,8 +33,9 @@ pool_members.map! do |member|
     # cloud-based node. In other words, `attribute?('cloud')` always answers
     # true and therefore redundant. Instead, decide if the cloud hash is empty,
     # or not.
-    if !member['cloud'].values.flatten.empty?
-      if !node['cloud'].values.flatten.empty? && (member['cloud']['provider'] == node['cloud']['provider'])
+    if member.attribute?('cloud') && !member['cloud'].values.flatten.empty?
+      if node['cloud'].attribute?('cloud') && !node['cloud'].values.flatten.empty? &&
+        (member['cloud']['provider'] == node['cloud']['provider'])
         member['cloud']['local_ipv4']
       else
         member['cloud']['public_ipv4']
