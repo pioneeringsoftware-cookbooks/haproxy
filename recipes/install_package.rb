@@ -36,9 +36,6 @@ template "/etc/init.d/haproxy" do
 end
 
 service "haproxy" do
-  # https://tickets.opscode.com/browse/CHEF-5276
-  provider Chef::Provider::Service::Upstart if platform?('ubuntu') && node['platform_version'].to_f >= 13.10
-
   supports :restart => true, :status => true, :reload => true
   action [:enable, :start]
 end
